@@ -1,9 +1,0 @@
-.next
-node_modules
-.env
-.env.local
-.env.production
-firebase-debug.log
-*.tsbuildinfo
-.npm-cache
-vercel.json.local
