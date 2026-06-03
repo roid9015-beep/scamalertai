@@ -16,4 +16,4 @@ export type AnalysisResult = {
   createdAt?: string;
 };
 
-export type Plan = "free" | "premium";
+export type Plan = "free" | "premium" | "premium_family";
