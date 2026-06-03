@@ -37,7 +37,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     () => ({
       user,
       loading,
-      token: async () => (user ? user.getIdToken(true) : null)
+      token: async () => {
+        if (!user) return null;
+        try {
+          return await user.getIdToken(false);
+        } catch {
+          try {
+            return await user.getIdToken(true);
+          } catch {
+            return null;
+          }
+        }
+      }
     }),
     [loading, user]
   );
