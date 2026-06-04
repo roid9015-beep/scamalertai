@@ -24,8 +24,14 @@ const copy = {
   }
 };
 
+function toArray(value: unknown): string[] {
+  if (Array.isArray(value)) return value.map(String);
+  if (typeof value === "string" && value.trim()) return [value];
+  return [];
+}
+
 export function RiskResult({ result }: { result: AnalysisResult }) {
-  const meta = copy[result.riskLevel];
+  const meta = copy[result.riskLevel] ?? copy.suspicious;
   const Icon = meta.icon;
 
   async function share() {
@@ -58,10 +64,10 @@ export function RiskResult({ result }: { result: AnalysisResult }) {
       <p className="mt-6 rounded-md bg-white/[0.04] p-4 text-lg leading-8 text-slate-100">{result.summary}</p>
 
       <div className="mt-5 grid gap-4 md:grid-cols-2">
-        <InfoBlock title="Señales de alerta" items={result.redFlags} />
-        <InfoBlock title="Presión emocional" items={result.emotionalManipulation} />
-        <InfoBlock title="Links sospechosos" items={result.suspiciousLinks} empty="No se detectaron links sospechosos." />
-        <InfoBlock title="Qué hacer ahora" items={result.recommendations} />
+        <InfoBlock title="Señales de alerta" items={toArray(result.redFlags)} />
+        <InfoBlock title="Presión emocional" items={toArray(result.emotionalManipulation)} />
+        <InfoBlock title="Links sospechosos" items={toArray(result.suspiciousLinks)} empty="No se detectaron links sospechosos." />
+        <InfoBlock title="Qué hacer ahora" items={toArray(result.recommendations)} />
       </div>
 
       {result.extractedText ? (
@@ -84,8 +90,8 @@ function InfoBlock({ title, items, empty = "No se encontraron señales claras." 
     <div className="rounded-md border border-white/10 bg-white/[0.03] p-4">
       <h3 className="font-semibold text-white">{title}</h3>
       <ul className="mt-3 space-y-2 text-sm leading-6 text-slate-300">
-        {(items?.length ? items : [empty]).map((item) => (
-          <li key={item}>{item}</li>
+        {(items.length ? items : [empty]).map((item, i) => (
+          <li key={i}>{item}</li>
         ))}
       </ul>
     </div>
